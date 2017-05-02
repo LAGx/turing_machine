@@ -1,2 +1,2 @@
-FileToLoad:turing_test.txt
+FileToLoad:turing.txt
 FileToGenerate:turing.cmd
