@@ -1,18 +1,21 @@
 [
 
+value:20: main_abc = (0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j)
+
+//for// x(20)+1
+value:19: add_old = (0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i)
+value:19: add_new =   (1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j)
+
 ]
 {
-/*
-u can make come comments
 
-*/
-q0,0:q0,0,r
-q0,1:q0,1,r
-q0,*:q1,*,l
-q1,1:q1,0,l //it`s ok comment
-q1,0:q2,1,l
-q1,*:!,1,s
-q2,1:q2,1,l
-q2,0:q2,0,l
-q2,*:!,*,r
+//for// x(20)+1
+		  q0,	main_abc:		  q0,	main_abc, R
+		  q0,		   *:	 add_one,		   *, L
+	 add_one, 	 add_old: normal_add, 	 add_new, S
+     add_one,		   j:   over_add,          0, L
+    over_add,   main_abc:	 add_one,	main_abc, S
+  normal_add,   main_abc:		   !,	main_abc, S
+
+
 }
