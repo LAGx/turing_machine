@@ -26,7 +26,8 @@ print("-Generating mt code...")
 parse_T.generateCode()
 print("-Checking for double comands...")
 parse_T.checkDoubleCommand()
-
+print("-Generating good q<number> states")
+parse_T.generateValidStates()
 
 if file_T.fileToGenerate.find(".cmd") != -1:
     print("-Converting to .cmd onishenko format...")

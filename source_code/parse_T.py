@@ -311,6 +311,71 @@ def checkDoubleCommand():
     file.close()
 
 
+
+def generateValidStates():
+    gener = open("work\\" + file_T.fileToGenerate, "r")
+    subfile = open("subfile", "w")
+    subfile.write(gener.read())
+    gener.close()
+    subfile.close()
+
+    gener = open("work\\" + file_T.fileToGenerate, "w")
+    subfile = open("subfile", "r")
+
+    found_states = [] #[name state, number]
+    last_free_number = 1
+    while True:
+        line = subfile.readline()
+        if not line: break
+
+        split = line.split(":")[0].split(",") + line.split(":")[1].split(",")
+        first_state = line.split(":")[0].split(",")[0]
+        wasFound = False
+        if (first_state != "q0"):
+            for f in found_states:
+                if f[0] == first_state:
+                    wasFound = True
+                    break
+
+            if not wasFound:
+                found_states.append([first_state, last_free_number])
+                line = "q"+ str(last_free_number) + "," + split[1] + ":" +split[2]+"," + split[3]+ "," + split[4]
+                last_free_number += 1
+            else:
+                for f in found_states:
+                    if(f[0] == first_state):
+                        line = "q" + str(f[1]) + "," + split[1] + ":" +split[2]+"," + split[3]+ "," + split[4]
+                        break
+
+
+        split = line.split(":")[0].split(",") + line.split(":")[1].split(",")
+        sec_state = line.split(":")[1].split(",")[0]
+        wasFound = False
+        if (sec_state != "q0" and sec_state != "!"):
+            for f in found_states:
+                if f[0] == sec_state:
+                    wasFound = True
+                    break
+
+            if not wasFound:
+                found_states.append([sec_state, last_free_number])
+                line = split[0] + "," + split[1] + ":" +"q"+ str(last_free_number)+"," + split[3]+ "," + split[4]
+                last_free_number += 1
+            else:
+                for f in found_states:
+                    if(f[0] == sec_state):
+                        line = split[0] + "," + split[1] + ":" +"q" + str(f[1])+"," + split[3]+ "," + split[4]
+                        break
+
+        if(last_free_number > 10000):
+            print("ERROR: q<number>, number over 10000.")
+            
+        gener.write(line)
+
+    gener.close()
+    subfile.close()
+    os.remove("subfile")
+
 def convertToCMD():
     gener = open("work\\" + file_T.fileToGenerate, "r")
     subfile = open("subfile", "w")
