@@ -1,2 +1,0 @@
-FileToLoad:turing.txt
-FileToGenerate:turing_onishenko.cmd
