@@ -2,6 +2,7 @@ import parse_T
 import file_T
 import variable
 
+
 print("-Reading settings...")
 file_T.readSettings()
 print("-Load file...")
@@ -26,8 +27,9 @@ print("-Generating mt code...")
 parse_T.generateCode()
 print("-Checking for double comands...")
 parse_T.checkDoubleCommand()
-print("-Generating good q<number> states")
+print("-Generating good q<number> states and good variables")
 parse_T.generateValidStates()
+parse_T.generateValidVariables()
 
 if file_T.fileToGenerate.find(".cmd") != -1:
     print("-Converting to .cmd onishenko format...")
@@ -36,3 +38,4 @@ else:
     print("WARNING: code was not generate to .cmd onishenko format")
 
 print("-Generate done!")
+

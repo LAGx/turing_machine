@@ -368,13 +368,116 @@ def generateValidStates():
                         break
 
         if(last_free_number > 10000):
-            print("ERROR: q<number>, number over 10000.")
-            
+            print("ERROR: q<number>, number over 10000. too many states")
+
+        gener.write(line)
+
+    gener.close()
+    subfile.close()
+
+
+def generateValidVariables():
+    gener = open("work\\" + file_T.fileToGenerate, "r")
+    subfile = open("subfile", "w")
+    subfile.write(gener.read())
+    gener.close()
+    subfile.close()
+
+    gener = open("work\\" + file_T.fileToGenerate, "w")
+    subfile = open("subfile", "r")
+
+    found_var = [] #[name state, number]
+    last_free_var = "va"
+
+    while True:
+        line = subfile.readline()
+        if not line: break
+
+        split = line.split(":")[0].split(",") + line.split(":")[1].split(",")
+        first_var = line.split(":")[0].split(",")[1]
+        wasFound = False
+        if (len(first_var) > 1):
+            for f in found_var:
+                if f[0] == first_var:
+                    wasFound = True
+                    break
+
+            if not wasFound:
+                found_var.append([first_var, last_free_var])
+                line = split[0] + "," + str(last_free_var) + ":" + split[2] + "," + split[3] + "," + split[4]
+                last_free_var = "v" + getMoreByOne(last_free_var[1::])
+            else:
+                for f in found_var:
+                    if(f[0] == first_var):
+                        line = split[0] + "," + str(f[1]) + ":" +split[2]+"," + split[3]+ "," + split[4]
+                        break
+
+
+        split = line.split(":")[0].split(",") + line.split(":")[1].split(",")
+        sec_var = split[3]
+        wasFound = False
+        if (len(sec_var) > 1):
+            for f in found_var:
+                if f[0] == sec_var:
+                    wasFound = True
+                    break
+
+            if not wasFound:
+                found_var.append([sec_var, last_free_var])
+                line = split[0] + "," + split[1] + ":" + split[2] + "," + str(last_free_var) + "," + split[4]
+                last_free_var = "v" + getMoreByOne(last_free_var[1::])
+            else:
+                for f in found_var:
+                    if(f[0] == sec_var):
+                        line = split[0] + "," + split[1] + ":" +split[2]+"," + str(f[1]) + "," + split[4]
+                        break
+
+        if(len(last_free_var) > 5):
+            print("ERROR: lenth of val over 5. too many values")
+
         gener.write(line)
 
     gener.close()
     subfile.close()
     os.remove("subfile")
+
+
+def getMoreByOne(val): #sorry for govnocod, but it`s zaebalo to write
+    if(len(val) == 1):
+        temp = ord(list(val)[0]) + 1
+        if(temp == 123):
+            return "aa"
+        else:
+            return chr(temp)
+    elif(len(val) == 2):
+        first_num = ord(list(val)[0])
+        sec_num = ord(list(val)[1])
+        if(sec_num + 1 == 123):
+            if(first_num + 1 == 123):
+                return "aaa"
+            else:
+                return chr(first_num+1) + "a"
+        else:
+            return chr(first_num) + chr(sec_num+1)
+
+    elif(len(val) == 3):
+        first_num = ord(list(val)[0])
+        sec_num = ord(list(val)[1])
+        third_num = ord(list(val)[2])
+        if(third_num + 1 == 123):
+            if(sec_num + 1 == 123):
+                if(first_num + 1 == 123):
+                    print("ERROR: lenth of val over 5. too many values")
+                    return
+                else:
+                    return chr(first_num+1) + "aa"
+            else:
+                return chr(first_num) + chr(sec_num+1) + "a"
+        else:
+            return chr(first_num) + chr(sec_num) + chr(third_num+1)
+    else:
+        print("ERROR: lenth of val over 5. too many values")
+
 
 def convertToCMD():
     gener = open("work\\" + file_T.fileToGenerate, "r")
